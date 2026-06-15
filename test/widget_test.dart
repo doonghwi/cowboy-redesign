@@ -6,6 +6,7 @@ import 'package:cowboy_redesign/models/player.dart';
 import 'package:cowboy_redesign/screens/game_table_screen.dart';
 import 'package:cowboy_redesign/screens/home_screen.dart';
 import 'package:cowboy_redesign/screens/ranking_screen.dart';
+import 'package:cowboy_redesign/screens/result_screen.dart';
 import 'package:cowboy_redesign/screens/saloon_screen.dart';
 
 void main() {
@@ -47,5 +48,14 @@ void main() {
     expect(find.text('Leaderboard'), findsOneWidget);
     expect(find.text('Calamity'), findsOneWidget); // rank 1 on the podium
     expect(find.text('You'), findsOneWidget);
+  });
+
+  testWidgets('Result screen renders victory banner and rewards', (tester) async {
+    await tester.pumpWidget(MaterialApp(theme: buildCowboyTheme(), home: const ResultScreen()));
+    await tester.pump();
+
+    expect(find.text('Victory'), findsOneWidget);
+    expect(find.text('+320'), findsOneWidget);
+    expect(find.text('Play again'), findsOneWidget);
   });
 }
