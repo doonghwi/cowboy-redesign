@@ -29,8 +29,13 @@ class _EffectsLabScreenState extends State<EffectsLabScreen> {
   Timer? _auto;
 
   /// Auto-fire mode (URL contains "auto") keeps an effect on screen so a
-  /// headless screenshot always catches one mid-flight.
+  /// headless screenshot always catches one mid-flight. `?auto=<kind>` picks
+  /// which effect to loop (bang/super/defend/trap); anything else mixes bangs.
   bool get _autoMode => Uri.base.toString().contains('auto');
+  String get _autoKind {
+    final q = Uri.base.queryParameters['auto'] ?? '';
+    return q.isEmpty ? 'bang' : q;
+  }
 
   @override
   void initState() {
@@ -40,13 +45,26 @@ class _EffectsLabScreenState extends State<EffectsLabScreen> {
       if (!mounted) return;
       setState(() => _shadersReady = true);
       if (_autoMode) {
-        _bang();
-        _auto = Timer.periodic(const Duration(milliseconds: 480), (_) {
-          if (!mounted) return;
-          _bang(isSuper: _target.isEven);
-        });
+        _autoFire();
+        _auto = Timer.periodic(const Duration(milliseconds: 520), (_) => _autoFire());
       }
     });
+  }
+
+  void _autoFire() {
+    if (!mounted) return;
+    switch (_autoKind) {
+      case 'defend':
+        _fx.dispatch(DefendEvent(1 + (_target % (_seatCount - 1))));
+        _target++;
+      case 'trap':
+        _fx.dispatch(TrapEvent(1 + (_target % (_seatCount - 1))));
+        _target++;
+      case 'super':
+        _bang(isSuper: true);
+      default:
+        _bang(isSuper: _target.isEven);
+    }
   }
 
   @override
@@ -93,6 +111,8 @@ class _EffectsLabScreenState extends State<EffectsLabScreen> {
                 ready: _shadersReady,
                 onBang: () => _bang(),
                 onSuper: () => _bang(isSuper: true),
+                onDefend: () => _fx.dispatch(DefendEvent(_target)),
+                onTrap: () => _fx.dispatch(TrapEvent(_target)),
                 onHit: () => _fx.dispatch(HitEvent(_target)),
                 onClear: _fx.clear,
               ),
@@ -106,8 +126,9 @@ class _EffectsLabScreenState extends State<EffectsLabScreen> {
   List<Offset> _layout(Size size, int n) {
     final cx = size.width / 2;
     final cy = size.height / 2;
-    final rx = size.width / 2 - 48;
-    final ry = size.height / 2 - 48;
+    // Inset enough that a ring/aura around an edge seat stays fully on screen.
+    final rx = size.width / 2 - 78;
+    final ry = size.height / 2 - 96;
     // Seat 0 at the bottom (shooter), the rest around the ring.
     return List.generate(n, (i) {
       final angle = math.pi / 2 + (2 * math.pi * i / n);
@@ -169,12 +190,16 @@ class _Controls extends StatelessWidget {
     required this.ready,
     required this.onBang,
     required this.onSuper,
+    required this.onDefend,
+    required this.onTrap,
     required this.onHit,
     required this.onClear,
   });
   final bool ready;
   final VoidCallback onBang;
   final VoidCallback onSuper;
+  final VoidCallback onDefend;
+  final VoidCallback onTrap;
   final VoidCallback onHit;
   final VoidCallback onClear;
   @override
@@ -187,7 +212,9 @@ class _Controls extends StatelessWidget {
         alignment: WrapAlignment.center,
         children: [
           CowboyButton(label: 'Bang!', icon: Icons.gps_fixed, onPressed: ready ? onBang : null),
-          CowboyButton(label: 'Super Bang', icon: Icons.bolt, kind: CButtonKind.secondary, onPressed: ready ? onSuper : null),
+          CowboyButton(label: 'Super', icon: Icons.bolt, kind: CButtonKind.secondary, onPressed: ready ? onSuper : null),
+          CowboyButton(label: 'Defend', icon: Icons.shield_outlined, kind: CButtonKind.secondary, onPressed: ready ? onDefend : null),
+          CowboyButton(label: 'Trap', icon: Icons.crisis_alert, kind: CButtonKind.ghost, onPressed: ready ? onTrap : null),
           CowboyButton(label: 'Hit', icon: Icons.whatshot, kind: CButtonKind.ghost, onPressed: onHit),
           CowboyButton(label: 'Clear', icon: Icons.clear_all, kind: CButtonKind.ghost, onPressed: onClear),
         ],

@@ -85,6 +85,11 @@ void main() {
     c.dispatch(const BangEvent(shooter: 0, target: 2, isSuper: true));
     expect(c.active.any((s) => s.kind == EffectKind.superBeam), isTrue);
 
+    c.dispatch(const DefendEvent(1));
+    c.dispatch(const TrapEvent(2));
+    expect(c.active.any((s) => s.kind == EffectKind.shieldRing), isTrue);
+    expect(c.active.any((s) => s.kind == EffectKind.trapRing), isTrue);
+
     c.clear();
     expect(c.active, isEmpty);
     c.dispose();

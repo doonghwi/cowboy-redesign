@@ -58,9 +58,9 @@ class EffectController extends ChangeNotifier {
           ),
         ];
       case DefendEvent(:final seat):
-        return [_centred(id, EffectKind.shieldRing, seat, 560, CColors.accent)];
+        return [_centred(id, EffectKind.shieldRing, seat, 760, CColors.accent)];
       case TrapEvent(:final seat):
-        return [_centred(id, EffectKind.trapRing, seat, 600, const Color(0xFFB5742E))];
+        return [_centred(id, EffectKind.trapRing, seat, 800, const Color(0xFFB5742E))];
       case SmokeEvent(:final seat):
         return [_centred(id, EffectKind.smokePuff, seat, 1100, CColors.textMid)];
       case CurseEvent(:final caster, :final target):

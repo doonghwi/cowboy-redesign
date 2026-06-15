@@ -4,6 +4,7 @@ import 'effect_controller.dart';
 import 'effect_spec.dart';
 import 'presenters/bang_tracer.dart';
 import 'presenters/hit_burst.dart';
+import 'presenters/ring_effect.dart';
 
 /// Layer 3 — renders the controller's active [EffectSpec]s as presenter
 /// widgets in a non-interactive overlay. Add it on top of the game/table
@@ -41,6 +42,7 @@ class EffectOverlay extends StatelessWidget {
         return HitBurst(key: key, spec: spec);
       case EffectKind.shieldRing:
       case EffectKind.trapRing:
+        return RingEffect(key: key, spec: spec);
       case EffectKind.smokePuff:
       case EffectKind.curseAura:
         return SizedBox.shrink(key: key); // implemented in later cycles
