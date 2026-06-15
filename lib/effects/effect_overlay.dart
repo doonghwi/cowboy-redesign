@@ -7,6 +7,7 @@ import 'presenters/curse_aura.dart';
 import 'presenters/hit_burst.dart';
 import 'presenters/ring_effect.dart';
 import 'presenters/smoke_puff.dart';
+import 'presenters/super_flash.dart';
 
 /// Layer 3 — renders the controller's active [EffectSpec]s as presenter
 /// widgets in a non-interactive overlay. Add it on top of the game/table
@@ -49,6 +50,8 @@ class EffectOverlay extends StatelessWidget {
         return SmokePuff(key: key, spec: spec);
       case EffectKind.curseAura:
         return CurseAura(key: key, spec: spec);
+      case EffectKind.superFlash:
+        return SuperFlash(key: key, spec: spec);
     }
   }
 }

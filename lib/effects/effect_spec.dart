@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Layer 2 output — an effect described purely as DATA: kind, anchor points,
 /// timing, curve, colour. Presenters consume this; they hold no game knowledge.
-enum EffectKind { beam, superBeam, shieldRing, trapRing, smokePuff, curseAura, hitBurst }
+enum EffectKind { beam, superBeam, shieldRing, trapRing, smokePuff, curseAura, hitBurst, superFlash }
 
 @immutable
 class EffectSpec {

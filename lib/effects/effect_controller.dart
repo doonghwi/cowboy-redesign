@@ -47,7 +47,7 @@ class EffectController extends ChangeNotifier {
     final id = _seq++;
     switch (e) {
       case BangEvent(:final shooter, :final target, :final isSuper):
-        return [
+        final specs = [
           EffectSpec(
             id: id,
             kind: isSuper ? EffectKind.superBeam : EffectKind.beam,
@@ -57,6 +57,18 @@ class EffectController extends ChangeNotifier {
             color: isSuper ? CColors.gold : CColors.primaryBright,
           ),
         ];
+        // A super bang also triggers a brief full-screen flash.
+        if (isSuper) {
+          specs.add(EffectSpec(
+            id: _seq++,
+            kind: EffectKind.superFlash,
+            from: resolveAnchor(shooter),
+            to: resolveAnchor(target),
+            duration: const Duration(milliseconds: 1100),
+            color: CColors.gold,
+          ));
+        }
+        return specs;
       case DefendEvent(:final seat):
         return [_centred(id, EffectKind.shieldRing, seat, 760, CColors.accent)];
       case TrapEvent(:final seat):
