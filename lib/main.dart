@@ -4,6 +4,7 @@ import 'dailyapp_stats.dart';
 import 'design/theme.dart';
 import 'screens/game_table_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/how_to_play_screen.dart';
 import 'screens/ranking_screen.dart';
 import 'screens/result_screen.dart';
 import 'screens/saloon_screen.dart';
@@ -38,6 +39,7 @@ class CowboyRedesignApp extends StatelessWidget {
         '/saloon': (_) => const SaloonScreen(),
         '/ranking': (_) => const RankingScreen(),
         '/result': (_) => const ResultScreen(),
+        '/howto': (_) => const HowToPlayScreen(),
       },
     );
   }

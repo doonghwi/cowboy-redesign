@@ -5,6 +5,7 @@ import 'package:cowboy_redesign/design/theme.dart';
 import 'package:cowboy_redesign/models/player.dart';
 import 'package:cowboy_redesign/screens/game_table_screen.dart';
 import 'package:cowboy_redesign/screens/home_screen.dart';
+import 'package:cowboy_redesign/screens/how_to_play_screen.dart';
 import 'package:cowboy_redesign/screens/ranking_screen.dart';
 import 'package:cowboy_redesign/screens/result_screen.dart';
 import 'package:cowboy_redesign/screens/saloon_screen.dart';
@@ -57,5 +58,14 @@ void main() {
     expect(find.text('Victory'), findsOneWidget);
     expect(find.text('+320'), findsOneWidget);
     expect(find.text('Play again'), findsOneWidget);
+  });
+
+  testWidgets('How to play lists core moves and win conditions', (tester) async {
+    await tester.pumpWidget(MaterialApp(theme: buildCowboyTheme(), home: const HowToPlayScreen()));
+    await tester.pump();
+
+    expect(find.text('Reload'), findsOneWidget);
+    expect(find.text('Super Bang'), findsOneWidget);
+    expect(find.text('Last standing'), findsOneWidget);
   });
 }

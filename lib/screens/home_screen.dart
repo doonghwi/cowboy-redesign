@@ -4,6 +4,7 @@ import '../design/components.dart';
 import '../design/theme.dart';
 import '../design/tokens.dart';
 import 'game_table_screen.dart';
+import 'how_to_play_screen.dart';
 import 'ranking_screen.dart';
 import 'saloon_screen.dart';
 
@@ -138,7 +139,9 @@ class _SecondaryRow extends StatelessWidget {
             kind: CButtonKind.ghost,
             icon: Icons.menu_book_outlined,
             expand: true,
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const HowToPlayScreen()),
+            ),
           ),
         ),
         const SizedBox(width: CSpace.sm),
