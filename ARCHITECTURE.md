@@ -2,7 +2,7 @@
 
 > Figma 주도(예정) 리디자인 프로토타입. **cowboy_party 본 앱과 완전 독립**(별도 폴더/repo/도메인).
 > 목표: 카우보이 파티 게임을 처음부터 예쁜 디자인 시스템으로 다시 그린다.
-> 최종 갱신: 2026-06-16 (Cycle 3 — 상점 Saloon 화면)
+> 최종 갱신: 2026-06-16 (Cycle 4 — 랭킹/리더보드 화면)
 
 ## 1. 디자인 시스템 — "Desert Dusk"
 서부(spaghetti-western) + 모던. 가죽/모래/석양 오렌지 + 남서부 터콰이즈 액센트.
@@ -31,7 +31,10 @@
 - `lib/screens/saloon_screen.dart` — **상점(Saloon)**. DuskBackground + 헤더(코인 잔액) + 반응형 GridView(폰 2열, `maxWidth~/220` clamp 2~4).
   - `CharacterCard`: CowboyCard(accent=레어리티색) + 레어리티 라벨·이모지 링·이름·태그라인·`_BuyChip`(Owned 초록 / 가격 골드, 잔액 부족 시 흐림).
   - 모델 `lib/models/character.dart` `Character`(catalog 11종, cowboy_party 로스터 발췌) + `Rarity`(common/rare/epic/legend → 색·라벨).
-- 라우팅: `main.dart` `routes` `/`(home)·`/table`·`/saloon`. 스크린샷 딥링크용(`#/table`, `#/saloon`).
+- `lib/screens/ranking_screen.dart` — **랭킹/리더보드**. DuskBackground + 헤더 + Top3 포디움(2·1·3위 단상, 1위 골드 글로우) + ListView(4위~, 내 행 골드 accent 하이라이트).
+  - 모델 `lib/models/ranking.dart` `RankEntry`(demo 8명, isYou 표시).
+  - 홈 코인 스트립 탭 → 랭킹(`CowboyCard.onTap`).
+- 라우팅: `main.dart` `routes` `/`(home)·`/table`·`/saloon`·`/ranking`. 스크린샷 딥링크용(`#/table`, `#/saloon`, `#/ranking`).
 
 ## 3. 진입점 / 인프라
 - `lib/main.dart` — `DailyAppStats.recordOpen(appId:'cowboy_redesign', ...)` fire-and-forget 핑 후 `CowboyRedesignApp`.
@@ -42,7 +45,7 @@
 1. ✅ Cycle 1: 디자인 시스템 + 홈 화면.
 2. ✅ Cycle 2: 게임 테이블(원형 좌석 Align 배치 + 액션 바 + 타이머).
 3. ✅ Cycle 3: 상점(Saloon) — 레어리티 캐릭터 카드 그리드.
-4. ⬜ 랭킹.
+4. ✅ Cycle 4: 랭킹/리더보드 — Top3 포디움 + 리스트.
 5. ⬜ 결과/쇼다운.
 > 본 게임 규칙은 `../cowboy_party/ARCHITECTURE.md` 참조(룩만 새로, 로직은 추후 이식 결정 사용자 몫).
 

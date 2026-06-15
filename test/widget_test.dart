@@ -5,6 +5,7 @@ import 'package:cowboy_redesign/design/theme.dart';
 import 'package:cowboy_redesign/models/player.dart';
 import 'package:cowboy_redesign/screens/game_table_screen.dart';
 import 'package:cowboy_redesign/screens/home_screen.dart';
+import 'package:cowboy_redesign/screens/ranking_screen.dart';
 import 'package:cowboy_redesign/screens/saloon_screen.dart';
 
 void main() {
@@ -37,5 +38,14 @@ void main() {
     expect(find.text('Saloon'), findsOneWidget);
     expect(find.text('Commoner'), findsOneWidget);
     expect(find.text('Owned'), findsWidgets); // free starters are owned
+  });
+
+  testWidgets('Ranking renders podium and your highlighted row', (tester) async {
+    await tester.pumpWidget(MaterialApp(theme: buildCowboyTheme(), home: const RankingScreen()));
+    await tester.pump();
+
+    expect(find.text('Leaderboard'), findsOneWidget);
+    expect(find.text('Calamity'), findsOneWidget); // rank 1 on the podium
+    expect(find.text('You'), findsOneWidget);
   });
 }

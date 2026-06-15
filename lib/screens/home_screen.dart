@@ -4,6 +4,7 @@ import '../design/components.dart';
 import '../design/theme.dart';
 import '../design/tokens.dart';
 import 'game_table_screen.dart';
+import 'ranking_screen.dart';
 import 'saloon_screen.dart';
 
 /// Home / title screen — the first impression.
@@ -162,6 +163,9 @@ class _CoinStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     return CowboyCard(
       padding: const EdgeInsets.symmetric(horizontal: CSpace.lg, vertical: CSpace.md),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const RankingScreen()),
+      ),
       child: Row(
         children: const [
           _Stat(icon: Icons.monetization_on, label: 'Coins', value: '1,250', color: CColors.gold),
