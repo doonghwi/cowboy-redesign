@@ -1,139 +1,77 @@
-# 카우보이 — 캐릭터 일러스트 프롬프트 (16종)
+# 카우보이 — 캐릭터 일러스트 프롬프트 (16종) · v2 한국게임 일러스트풍
 
-> 사장님이 직접 생성용. 어떤 이미지 모델(Midjourney·DALL·E·Gemini·Stable Diffusion 등)에 써도 됩니다.
-> **일관성 비법**: 아래 [공통 스타일 블록]을 모든 프롬프트 앞에 **똑같이** 붙이고, 캐릭터별 문장만 갈아끼우세요.
-> 같은 모델·같은 스타일 블록(가능하면 같은 seed/스타일 레퍼런스)을 쓰면 16종이 한 세트처럼 보입니다.
+> 스타일 목표(사용자 레퍼런스): **한국 모바일게임/웹툰풍 반실사 캐릭터 일러스트** —
+> 부드러운 painterly 채색, 잘생기고 디테일한 얼굴, 깔끔한 흰 배경, 가챠게임 스플래시아트 퀄.
+> 서부(카우보이) 테마는 유지, 렌더링만 이 스타일로.
+>
+> **일관성 비법**: [공통 스타일 블록]을 모든 프롬프트 앞에 똑같이 붙이고 캐릭터 문장만 교체.
+> 같은 모델·같은 스타일 레퍼런스(가능하면 2·3번 사진을 style ref로)로 생성하면 한 세트처럼 나옴.
 
-## 저장 규칙 (생성 후)
-- 정사각형(1:1), 권장 1024×1024, **PNG**. 배경은 가능하면 투명 또는 동일한 사막노을 배경.
-- 파일명은 **캐릭터 ID 그대로**: `assets/characters/<id>.png` (예: `sniper.png`). ID는 각 항목 제목 괄호 안.
-- 다 만들면 `cowboy_redesign/assets/characters/`에 넣어주세요. 디자인 세션이 자동으로 상점·게임 좌석에 끼웁니다.
+## 저장 규칙
+- 1:1 정사각형, 권장 1024×1024, **PNG**, **깔끔한 흰 배경**(게임 카드/좌석 합성용).
+- 파일명 = 캐릭터 ID: `assets/characters/<id>.png` (예: `sniper.png`). ID는 각 항목 괄호 안.
+- `cowboy_redesign/assets/characters/`에 넣으면 디자인 세션이 상점·좌석에 자동 통합(누락분은 플레이스홀더).
 
 ---
 
 ## [공통 스타일 블록] — 모든 프롬프트 앞에 붙이기
 ```
-Stylized 2D game character illustration, painterly semi-cel-shaded cartoon style,
-Wild West frontier theme, single character, front-facing bust portrait from the
-chest up, centered composition, expressive face, bold clean silhouette, dramatic
-warm rim lighting with soft desert-dusk ambient, subtle vignette, cohesive
-collectible character-set look, rich but limited palette, 1:1 square, high detail,
-clean edges, no text, no watermark, no logo. Character:
+Premium Korean mobile gacha-game character illustration, semi-realistic manhwa/anime
+art style, soft painterly cel-shading, smooth skin with glossy highlights, beautiful
+refined attractive face, expressive detailed eyes, detailed flowing hair, bust portrait
+from the chest up, confident charismatic pose, clean pure white background, soft studio
+rim lighting, high-detail splash-art quality, crisp clean rendering, 1:1 square, no text,
+no watermark. Character: a Wild West
 ```
 
 ---
 
-## 16종 캐릭터별 프롬프트 (공통 블록 뒤에 이어 붙이기)
+## 16종 (공통 블록 뒤에 이어 붙이기)
 
-### 1. 일반인 (commoner) — 기본·무료
-주조색 탠/브라운(#8A7A5E).
-```
-an ordinary plain cowboy gunslinger, simple worn leather vest, plain bandana,
-calm everyman face, no special gear, humble and approachable, earthy tan-brown palette.
-```
+### 1. 일반인 (commoner)
+`rookie cowboy in a simple leather vest over a shirt and plain bandana, friendly approachable smile, warm tan-brown color accents.`
 
-### 2. 준비자 (prepper) — 1발 장전 시작
-주조색 골드(#D9A441).
-```
-a prepared cowboy who is always ready, holding a freshly loaded revolver with one
-round chambered, bandolier of bullets, focused confident expression, warm gold palette.
-```
+### 2. 준비자 (prepper)
+`always-ready cowboy holding a freshly loaded revolver with a bullet bandolier across the chest, focused confident look, golden-yellow color accents.`
 
-### 3. 스나이퍼 (sniper) — 20% 방어 무시
-주조색 다크레드(#9E2B25).
-```
-a deadeye sniper cowboy, one eye narrowed aiming down a long-barreled scoped rifle,
-cold precise stare, crosshair glint, lean and sharp, deep crimson-red palette.
-```
+### 3. 스나이퍼 (sniper)
+`cool deadeye sniper holding a long scoped rifle, one eye narrowed in a sharp calm stare, lean and sharp, crimson-red color accents.`
 
-### 4. 스피드로더 (speedloader) — 50% +2장전
-주조색 러스트 오렌지(#C8541E).
-```
-a fast-handed cowboy spinning a revolver while reloading in a blur, motion streaks,
-two bullets flying into the cylinder, cocky grin, energetic rust-orange palette.
-```
+### 4. 스피드로더 (speedloader)
+`energetic gunslinger twirling a revolver mid-reload with dynamic motion, cocky grin, rust-orange color accents.`
 
-### 5. 의사 (doctor) — 치명상 1회 버팀
-주조색 틸 그린(#2E6E5A).
-```
-a frontier field doctor cowboy, white-cross armband, stethoscope over a dusty coat,
-small medical bag, steady reassuring face, calm teal-green palette.
-```
+### 5. 의사 (doctor)
+`handsome frontier field doctor with a white-cross armband and a stethoscope over a dusty coat, gentle steady smile, teal-green color accents.`
 
-### 6. 스모커 (smoker) — 연막 회피
-주조색 슬레이트 블루그레이(#6B7A8F).
-```
-a mysterious cowboy wreathed in drifting smoke, cigarillo, smoke grenade on belt,
-half-hidden face in haze, cool aloof expression, smoky slate blue-gray palette.
-```
+### 6. 스모커 (smoker)
+`brooding cowboy with a cigarillo and faint drifting smoke, half-lidded cool gaze, slate blue-gray color accents.`
 
-### 7. 사냥꾼 (hunter) — 덫·반사
-주조색 다크 브라운(#7A3E18).
-```
-a rugged frontier hunter cowboy, fur-trimmed coat, a steel bear-trap hanging from
-the belt, alert predatory eyes, tracking pose, rugged dark-brown palette.
-```
+### 7. 사냥꾼 (hunter)
+`rugged hunter cowboy in a fur-trimmed coat with a steel bear-trap on the belt, alert sharp predatory eyes, dark-brown color accents.`
 
-### 8. 리셋터 (resetter) — 무효
-주조색 블루(#2E5E8E).
-```
-a time-bending cowboy, glowing circular reset/rewind rune-clock motif behind him,
-hand raised to undo, serene controlling expression, cool steel-blue palette.
-```
+### 8. 리셋터 (resetter)
+`mysterious cowboy with a glowing circular rewind-clock rune motif behind him, calm controlling expression, steel-blue color accents.`
 
-### 9. 결투가 (duelist) — 1대1 즉승
-주조색 다크 퍼플(#3A2A55).
-```
-an elite duelist cowboy, two revolvers crossed, sharp duel stance at high noon,
-arrogant fearless smirk, scarf flowing, regal dark-purple palette.
-```
+### 9. 결투가 (duelist)
+`elegant elite duelist with two crossed revolvers and a flowing scarf, arrogant charming smirk, deep-purple color accents.`
 
-### 10. 평화주의자 (pacifist) — 못 쏨, 6장전 승리
-주조색 그린(#4E8D7C).
-```
-a peaceful cowboy who refuses to shoot, holstered gun wrapped in a white cloth,
-holding a desert flower, gentle kind smile, harmonious sage-green palette.
-```
+### 10. 평화주의자 (pacifist)
+`serene pacifist cowboy with a holstered gun wrapped in white cloth, holding a desert flower, gentle kind smile, sage-green color accents.`
 
-### 11. 그림자 (shadow) — 정보 은폐
-주조색 니어블랙(#2B2B3A).
-```
-a shadowy cowboy half-dissolving into darkness, face obscured under a low hat brim,
-only glinting eyes visible, silent menacing aura, near-black inky palette.
-```
+### 11. 그림자 (shadow)
+`mysterious cowboy half in shadow under a low hat brim, only sharp glinting eyes visible, silent menacing aura, near-black inky color accents.`
 
-### 12. 러시안룰렛 (roulette) — 운명의 방아쇠 50:50
-주조색 블러드레드(#8E1E1E).
-```
-a fatalistic gambler cowboy, revolver cylinder open showing a single bullet,
-roulette-wheel and dice motifs, reckless thrill-seeking grin, blood-red palette.
-```
+### 12. 러시안룰렛 (roulette)
+`thrill-seeking gambler cowboy holding a revolver with the cylinder open showing a single bullet, roulette-wheel and dice motifs, reckless grin, blood-red color accents.`
 
-### 13. 쌍권총 (dualgun) — 더블 빵야
-주조색 오렌지브라운(#B5642A).
-```
-a dual-wielding cowboy firing two revolvers outward at once, twin muzzle flashes,
-wild confident laugh, dynamic action pose, fiery orange-brown palette.
-```
+### 13. 쌍권총 (dualgun)
+`flashy dual-wielding cowboy holding two revolvers in a dynamic pose, wild confident laugh, fiery orange-brown color accents.`
 
-### 14. 파파라치 (paparazzi) — 엿보기
-주조색 블루(#4A6FA5).
-```
-a sneaky paparazzi cowboy peeking with a vintage flash camera, finger on shutter,
-sly knowing grin, press-pass on hat, bright inquisitive blue palette.
-```
+### 14. 파파라치 (paparazzi)
+`sly cowboy holding a vintage flash camera with a press-pass tucked in the hat, knowing smirk, bright inquisitive blue color accents.`
 
-### 15. 부두술사 (voodoo) — 저주
-주조색 퍼플(#5B3A8E).
-```
-a voodoo witch-doctor cowboy, skull face-paint, holding a cursed doll and revolver,
-glowing purple hex sigils swirling, eerie grin, mystic deep-purple palette.
-```
+### 15. 부두술사 (voodoo)
+`eerie voodoo witch-doctor cowboy with subtle skull face-paint holding a cursed doll, glowing purple hex sigils swirling, mystic deep-purple color accents.`
 
-### 16. ??? (mystery) — 미공개·랜덤
-주조색 다크그레이(#3A3A3A).
-```
-a completely mysterious cowboy silhouette, face hidden behind a featureless mask
-with a glowing question mark, identity concealed, intriguing enigmatic aura,
-monochrome dark-gray palette.
-```
+### 16. ??? (mystery)
+`fully masked enigmatic cowboy wearing a featureless mask with a glowing question mark, identity concealed, intriguing aura, monochrome dark-gray palette.`

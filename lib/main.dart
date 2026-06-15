@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'dailyapp_stats.dart';
 import 'design/theme.dart';
+import 'screens/effects_lab_screen.dart';
 import 'screens/game_table_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/how_to_play_screen.dart';
@@ -40,6 +41,7 @@ class CowboyRedesignApp extends StatelessWidget {
         '/ranking': (_) => const RankingScreen(),
         '/result': (_) => const ResultScreen(),
         '/howto': (_) => const HowToPlayScreen(),
+        '/lab': (_) => const EffectsLabScreen(),
       },
     );
   }

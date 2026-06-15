@@ -2,7 +2,11 @@
 
 > Figma 주도(예정) 리디자인 프로토타입. **cowboy_party 본 앱과 완전 독립**(별도 폴더/repo/도메인).
 > 목표: 카우보이 파티 게임을 처음부터 예쁜 디자인 시스템으로 다시 그린다.
-> 최종 갱신: 2026-06-16 (Cycle 7 — 공통 페이지 전환 애니메이션)
+> 최종 갱신: 2026-06-16 (Cycle 9 — 이펙트 시스템 + 빵야/슈퍼빵야)
+>
+> **피벗(2026-06-16):** Figma 폐기. 이 레포는 이제 **아트+이펙트 랩**. 핵심 화면(Cycle1~7)은 베이스로 유지.
+> 새 목표: (1) 코드 기반 이펙트 고도화, (2) 캐릭터 일러스트 통합. cowboy_party는 읽기 전용 레퍼런스.
+> 이펙트 감사·설계는 `EFFECTS_AUDIT.md` / `EFFECTS_PLAN.md` 참조.
 
 ## 1. 디자인 시스템 — "Desert Dusk"
 서부(spaghetti-western) + 모던. 가죽/모래/석양 오렌지 + 남서부 터콰이즈 액센트.
@@ -20,6 +24,17 @@
   - `CowboyButton` — primary(그라데이션+글로우)/secondary(터콰이즈 아웃라인)/ghost. 누름 애니메이션(scale 0.97).
   - `CowboyCard` — 가죽 패널(그라데이션+헤어라인 보더+그림자). 옵션 좌측 accent 스트라이프(IntrinsicHeight로 풀하이트).
   - `SectionLabel` — 작은 올캡스 eyebrow.
+
+## 1.5 이펙트 시스템 (lib/effects/) — 이벤트→디스패처→프레젠테이션
+- `game_event.dart` — sealed `GameEvent`(Bang/Defend/Trap/Smoke/Curse/Hit). 좌석 인덱스만, 좌표·색 무지.
+- `effect_spec.dart` — `EffectKind` + `EffectSpec`(불변 데이터: kind·from·to·duration·curve·color·anchorRadius). **이펙트=데이터**.
+- `effect_controller.dart` — `EffectController extends ChangeNotifier`. `AnchorResolver`(좌석→Offset) 주입. `dispatch(event)`→스펙 생성·추가·만료 제거. 게임상태 불침투.
+- `effect_shaders.dart` — `EffectShaders.load()`로 `beam.frag`/`ring.frag` 프리로드(`ui.FragmentProgram`).
+- `effect_overlay.dart` — `EffectOverlay`(IgnorePointer + AnimatedBuilder) active 스펙→프레젠터 매핑.
+- `presenters/bang_tracer.dart` — 빵야/슈퍼빵야: **Canvas 다중 글로우 라인(베이스, 항상 보임) + 셰이더 블룸(origin-anchored picture를 회전 합성해 FlutterFragCoord 스크린좌표 함정 회피) + Flame ComputedParticle 머즐 버스트 + 화살촉 + 임팩트 플래시**. 슈퍼는 골드·두께·파티클↑.
+- `presenters/hit_burst.dart` — 히트/처치: Flame 방사 파편 + 확장 쇼크링.
+- 셰이더 `shaders/beam.frag`(빔 블룸·헤드 트래블), `shaders/ring.frag`(링 쇼크웨이브) — pubspec `flutter: shaders:` 등록.
+- 검증: `lib/screens/effects_lab_screen.dart`(`/lab`) — 좌석 토큰 링 + Bang/Super/Hit/Clear 버튼. URL에 `auto` 포함 시 주기 발사(스크린샷용, `?auto=1#/lab`). 샷 `shots/effects/`.
 
 ## 2. 화면
 - `lib/screens/home_screen.dart` — 홈/타이틀. DuskBackground 위 워드마크(Cowboy/Party) + 태그라인 + PLAY CTA(→ /table) + 보조(How to play/Saloon) + 코인/스트릭/승수 스탯 스트립.

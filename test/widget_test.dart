@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cowboy_redesign/design/theme.dart';
+import 'package:cowboy_redesign/effects/effect_controller.dart';
+import 'package:cowboy_redesign/effects/effect_spec.dart';
+import 'package:cowboy_redesign/effects/game_event.dart';
 import 'package:cowboy_redesign/models/player.dart';
 import 'package:cowboy_redesign/screens/game_table_screen.dart';
 import 'package:cowboy_redesign/screens/home_screen.dart';
@@ -67,5 +70,23 @@ void main() {
     expect(find.text('Reload'), findsOneWidget);
     expect(find.text('Super Bang'), findsOneWidget);
     expect(find.text('Last standing'), findsOneWidget);
+  });
+
+  test('EffectController maps events to effect-spec data with anchors', () {
+    final anchors = [const Offset(0, 100), const Offset(50, 0), const Offset(100, 100)];
+    final c = EffectController(resolveAnchor: (i) => anchors[i]);
+
+    c.dispatch(const BangEvent(shooter: 0, target: 1));
+    expect(c.active, hasLength(1));
+    expect(c.active.first.kind, EffectKind.beam);
+    expect(c.active.first.from, anchors[0]);
+    expect(c.active.first.to, anchors[1]);
+
+    c.dispatch(const BangEvent(shooter: 0, target: 2, isSuper: true));
+    expect(c.active.any((s) => s.kind == EffectKind.superBeam), isTrue);
+
+    c.clear();
+    expect(c.active, isEmpty);
+    c.dispose();
   });
 }
