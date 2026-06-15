@@ -5,6 +5,7 @@ import 'package:cowboy_redesign/design/theme.dart';
 import 'package:cowboy_redesign/models/player.dart';
 import 'package:cowboy_redesign/screens/game_table_screen.dart';
 import 'package:cowboy_redesign/screens/home_screen.dart';
+import 'package:cowboy_redesign/screens/saloon_screen.dart';
 
 void main() {
   testWidgets('Home screen renders wordmark and primary CTA', (tester) async {
@@ -27,5 +28,14 @@ void main() {
     // Core actions present.
     expect(find.text('Reload'), findsOneWidget);
     expect(find.text('Bang!'), findsOneWidget);
+  });
+
+  testWidgets('Saloon renders header and character cards', (tester) async {
+    await tester.pumpWidget(MaterialApp(theme: buildCowboyTheme(), home: const SaloonScreen()));
+    await tester.pump();
+
+    expect(find.text('Saloon'), findsOneWidget);
+    expect(find.text('Commoner'), findsOneWidget);
+    expect(find.text('Owned'), findsWidgets); // free starters are owned
   });
 }

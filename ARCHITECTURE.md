@@ -2,7 +2,7 @@
 
 > Figma 주도(예정) 리디자인 프로토타입. **cowboy_party 본 앱과 완전 독립**(별도 폴더/repo/도메인).
 > 목표: 카우보이 파티 게임을 처음부터 예쁜 디자인 시스템으로 다시 그린다.
-> 최종 갱신: 2026-06-16 (Cycle 2 — 게임 테이블 화면)
+> 최종 갱신: 2026-06-16 (Cycle 3 — 상점 Saloon 화면)
 
 ## 1. 디자인 시스템 — "Desert Dusk"
 서부(spaghetti-western) + 모던. 가죽/모래/석양 오렌지 + 남서부 터콰이즈 액센트.
@@ -28,7 +28,10 @@
   - 좌석 위젯 `lib/widgets/player_seat.dart` `PlayerSeat`: 아바타 토큰(이모지)·이름·역할 라벨·탄약 핍·상태(방어/사망 닷). highlight=내 차례.
   - 액션바 `lib/widgets/action_bar.dart` `ActionBar`: parallel 토글(연막) 상단 스트립 + 코어 4행(Reload/Defend/Bang!/Trap). cowboy_party SpecialSlot 분류를 룩만 새로 반영. `GameAction` enum, 선택 상태 토글.
   - 모델 `lib/models/player.dart` `Player`(뷰모델, demoTable 6인). 로직은 추후 cowboy_party에서 이식.
-- 라우팅: `main.dart` `routes` `/`(home)·`/table`(table). 스크린샷 딥링크용(`#/table`).
+- `lib/screens/saloon_screen.dart` — **상점(Saloon)**. DuskBackground + 헤더(코인 잔액) + 반응형 GridView(폰 2열, `maxWidth~/220` clamp 2~4).
+  - `CharacterCard`: CowboyCard(accent=레어리티색) + 레어리티 라벨·이모지 링·이름·태그라인·`_BuyChip`(Owned 초록 / 가격 골드, 잔액 부족 시 흐림).
+  - 모델 `lib/models/character.dart` `Character`(catalog 11종, cowboy_party 로스터 발췌) + `Rarity`(common/rare/epic/legend → 색·라벨).
+- 라우팅: `main.dart` `routes` `/`(home)·`/table`·`/saloon`. 스크린샷 딥링크용(`#/table`, `#/saloon`).
 
 ## 3. 진입점 / 인프라
 - `lib/main.dart` — `DailyAppStats.recordOpen(appId:'cowboy_redesign', ...)` fire-and-forget 핑 후 `CowboyRedesignApp`.
@@ -38,7 +41,7 @@
 ## 4. 진행 단계 (로드맵)
 1. ✅ Cycle 1: 디자인 시스템 + 홈 화면.
 2. ✅ Cycle 2: 게임 테이블(원형 좌석 Align 배치 + 액션 바 + 타이머).
-3. ⬜ 상점(Saloon) — 캐릭터 카드.
+3. ✅ Cycle 3: 상점(Saloon) — 레어리티 캐릭터 카드 그리드.
 4. ⬜ 랭킹.
 5. ⬜ 결과/쇼다운.
 > 본 게임 규칙은 `../cowboy_party/ARCHITECTURE.md` 참조(룩만 새로, 로직은 추후 이식 결정 사용자 몫).

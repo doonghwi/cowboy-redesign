@@ -4,6 +4,7 @@ import '../design/components.dart';
 import '../design/theme.dart';
 import '../design/tokens.dart';
 import 'game_table_screen.dart';
+import 'saloon_screen.dart';
 
 /// Home / title screen — the first impression.
 /// Hero wordmark over the dusk sky, a single confident "Play" CTA, secondary
@@ -146,7 +147,9 @@ class _SecondaryRow extends StatelessWidget {
             kind: CButtonKind.secondary,
             icon: Icons.storefront_outlined,
             expand: true,
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const SaloonScreen()),
+            ),
           ),
         ),
       ],
