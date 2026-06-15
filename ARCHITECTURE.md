@@ -2,7 +2,7 @@
 
 > Figma 주도(예정) 리디자인 프로토타입. **cowboy_party 본 앱과 완전 독립**(별도 폴더/repo/도메인).
 > 목표: 카우보이 파티 게임을 처음부터 예쁜 디자인 시스템으로 다시 그린다.
-> 최종 갱신: 2026-06-16 (Cycle 12 — 연막/저주 이펙트 · 전 6종 완성)
+> 최종 갱신: 2026-06-16 (Cycle 13 — 이펙트를 실게임 테이블에 통합)
 >
 > **피벗(2026-06-16):** Figma 폐기. 이 레포는 이제 **아트+이펙트 랩**. 핵심 화면(Cycle1~7)은 베이스로 유지.
 > 새 목표: (1) 코드 기반 이펙트 고도화, (2) 캐릭터 일러스트 통합. cowboy_party는 읽기 전용 레퍼런스.
@@ -49,6 +49,7 @@
 - `lib/screens/home_screen.dart` — 홈/타이틀. DuskBackground 위 워드마크(Cowboy/Party) + 태그라인 + PLAY CTA(→ /table) + 보조(How to play/Saloon) + 코인/스트릭/승수 스탯 스트립.
   - 레이아웃: SingleChildScrollView + Center + ConstrainedBox(maxWidth 520) + Padding + 명시적 간격(세로 Spacer/IntrinsicHeight 미사용 — 스크롤뷰 무한 높이 충돌 회피, LESSONS 참조).
 - `lib/screens/game_table_screen.dart` — **게임 테이블(센터피스)**. DuskBackground + Column(상단바·아레나·ActionBar).
+  - **이펙트 통합(Cycle13):** `EffectController`+`EffectOverlay`를 화면에 얹고, `_TableArena`가 Align 슬롯→픽셀 앵커(아바타 중심)로 변환해 `onLayout`으로 전달 → 컨트롤러 resolveAnchor가 실좌석 좌표 사용. 좌석 탭(`GestureDetector`)→선택 액션에 맞는 이벤트 발사(빵야 you→상대, 방어/덫 self, 연막 토글). `?auto`로 데모 자동 발사(스크린샷, shots/effects/table_effects.png).
   - `_TableArena`: 좌석을 `Align(Alignment)`로 배치(2~6인별 `_layouts` 맵, "You"=하단 중앙, 나머지=상단 호). trig+Positioned 대신 Align 사용(우측 좌석 누락 버그 회피). 중앙 `_FeltTable`(라디얼 펠트) + `_CenterTimer`(원형 진행바 + 카운트).
   - 좌석 위젯 `lib/widgets/player_seat.dart` `PlayerSeat`: 아바타 토큰(이모지)·이름·역할 라벨·탄약 핍·상태(방어/사망 닷). highlight=내 차례.
   - 액션바 `lib/widgets/action_bar.dart` `ActionBar`: parallel 토글(연막) 상단 스트립 + 코어 4행(Reload/Defend/Bang!/Trap). cowboy_party SpecialSlot 분류를 룩만 새로 반영. `GameAction` enum, 선택 상태 토글.

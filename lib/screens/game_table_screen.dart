@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -5,12 +6,17 @@ import 'package:flutter/material.dart';
 import '../design/components.dart';
 import '../design/theme.dart';
 import '../design/tokens.dart';
+import '../effects/effect_controller.dart';
+import '../effects/effect_overlay.dart';
+import '../effects/effect_shaders.dart';
+import '../effects/game_event.dart';
 import '../models/player.dart';
 import '../widgets/action_bar.dart';
 import '../widgets/player_seat.dart';
 
 /// The game table — the centerpiece. Cowboys arranged around a western felt
-/// table, a turn timer in the middle, and the action bar pinned to the bottom.
+/// table, a turn timer in the middle, the action bar pinned to the bottom, and
+/// the code-based effect layer firing on real seat anchors.
 class GameTableScreen extends StatefulWidget {
   const GameTableScreen({super.key, this.players = Player.demoTable});
   final List<Player> players;
@@ -23,6 +29,73 @@ class _GameTableScreenState extends State<GameTableScreen> {
   GameAction? _selected;
   bool _smoke = false;
 
+  late final EffectController _fx;
+  List<Offset> _anchors = const [];
+  int _youIndex = 0;
+  Timer? _auto;
+  int _autoStep = 0;
+
+  bool get _autoMode => Uri.base.toString().contains('auto');
+
+  @override
+  void initState() {
+    super.initState();
+    _fx = EffectController(
+      resolveAnchor: (i) => (i >= 0 && i < _anchors.length) ? _anchors[i] : Offset.zero,
+    );
+    EffectShaders.load().then((_) {
+      if (!mounted) return;
+      setState(() {});
+      if (_autoMode) {
+        _autoDemo();
+        _auto = Timer.periodic(const Duration(milliseconds: 320), (_) => _autoDemo());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _auto?.cancel();
+    _fx.dispose();
+    super.dispose();
+  }
+
+  void _autoDemo() {
+    if (!mounted || _anchors.isEmpty) return;
+    final rivals = [for (var i = 0; i < _anchors.length; i++) if (i != _youIndex) i];
+    if (rivals.isEmpty) return;
+    final target = rivals[_autoStep % rivals.length];
+    // Mostly beams (so a shot is always crossing the table for screenshots),
+    // with an occasional defend ring and curse for variety.
+    switch (_autoStep % 5) {
+      case 1:
+        _fx.dispatch(DefendEvent(_youIndex));
+        _fx.dispatch(BangEvent(shooter: _youIndex, target: target));
+      case 4:
+        _fx.dispatch(CurseEvent(caster: _youIndex, target: target));
+        _fx.dispatch(BangEvent(shooter: _youIndex, target: target, isSuper: true));
+      default:
+        _fx.dispatch(BangEvent(shooter: _youIndex, target: target, isSuper: _autoStep.isEven));
+    }
+    _autoStep++;
+  }
+
+  /// Player tapped a seat — fire the effect matching the selected action.
+  void _onSeatTap(int index) {
+    if (index == _youIndex) {
+      if (_selected == GameAction.defend) {
+        _fx.dispatch(DefendEvent(_youIndex));
+      } else if (_selected == GameAction.special) {
+        _fx.dispatch(TrapEvent(_youIndex));
+      }
+      if (_smoke) _fx.dispatch(SmokeEvent(_youIndex));
+      return;
+    }
+    // Tapping a rival fires your shot at them.
+    final isSuper = _selected == GameAction.special; // demo: special = super-ish
+    _fx.dispatch(BangEvent(shooter: _youIndex, target: index, isSuper: isSuper));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +104,17 @@ class _GameTableScreenState extends State<GameTableScreen> {
           child: Column(
             children: [
               const _TableTopBar(round: 3),
-              Expanded(child: _TableArena(players: widget.players)),
+              Expanded(
+                child: _TableArena(
+                  players: widget.players,
+                  controller: _fx,
+                  onLayout: (anchors, youIndex) {
+                    _anchors = anchors;
+                    _youIndex = youIndex;
+                  },
+                  onSeatTap: _onSeatTap,
+                ),
+              ),
               ActionBar(
                 selected: _selected,
                 onSelect: (a) => setState(() => _selected = _selected == a ? null : a),
@@ -75,10 +158,19 @@ class _TableTopBar extends StatelessWidget {
   }
 }
 
-/// Lays the seats out around an ellipse, "You" anchored at the bottom.
+/// Lays the seats out around an ellipse, "You" anchored at the bottom, with the
+/// effect overlay composited on top using the same seat anchors.
 class _TableArena extends StatelessWidget {
-  const _TableArena({required this.players});
+  const _TableArena({
+    required this.players,
+    required this.controller,
+    required this.onLayout,
+    required this.onSeatTap,
+  });
   final List<Player> players;
+  final EffectController controller;
+  final void Function(List<Offset> anchors, int youIndex) onLayout;
+  final ValueChanged<int> onSeatTap;
 
   /// Seat positions as Alignment(x, y) ∈ [-1, 1], indexed by table size.
   /// "You" is always the last entry (bottom-centre); rivals ring the top.
@@ -108,6 +200,9 @@ class _TableArena extends StatelessWidget {
     ],
   };
 
+  static const double _seatW = 88;
+  static const double _seatH = 104;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -117,22 +212,38 @@ class _TableArena extends StatelessWidget {
         final ordered = [...players.where((p) => p != you), you];
         final n = ordered.length.clamp(2, 6);
         final slots = _layouts[n] ?? _layouts[6]!;
+        final count = math.min(ordered.length, slots.length);
 
-        final feltSize = math.min(c.maxWidth, c.maxHeight) * 0.62;
+        // Resolve each Align slot to the avatar-centre anchor for effects.
+        final w = c.maxWidth, h = c.maxHeight;
+        final anchors = <Offset>[];
+        for (var i = 0; i < count; i++) {
+          final a = slots[i];
+          final cx = w / 2 + a.x * (w - _seatW) / 2;
+          final cy = h / 2 + a.y * (h - _seatH) / 2;
+          anchors.add(Offset(cx, cy - (_seatH / 2 - 29))); // avatar sits at column top
+        }
+        onLayout(anchors, count - 1); // "You" is the last seat
+
+        final feltSize = math.min(w, h) * 0.62;
 
         return Stack(
           alignment: Alignment.center,
           children: [
             _FeltTable(size: feltSize),
             const _CenterTimer(seconds: 12),
-            for (var i = 0; i < ordered.length && i < slots.length; i++)
+            for (var i = 0; i < count; i++)
               Align(
                 alignment: slots[i],
-                child: SizedBox(
-                  width: 88,
-                  child: PlayerSeat(player: ordered[i], highlight: ordered[i].isYou),
+                child: GestureDetector(
+                  onTap: () => onSeatTap(i),
+                  child: SizedBox(
+                    width: _seatW,
+                    child: PlayerSeat(player: ordered[i], highlight: ordered[i].isYou),
+                  ),
                 ),
               ),
+            EffectOverlay(controller: controller),
           ],
         );
       },
