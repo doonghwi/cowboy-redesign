@@ -4,6 +4,7 @@ import '../design/components.dart';
 import '../design/theme.dart';
 import '../design/tokens.dart';
 import '../models/character.dart';
+import '../widgets/character_portrait.dart';
 
 /// The Saloon — the character shop. A responsive grid of character cards over
 /// the shared dusk backdrop, with the player's coin balance pinned to the top.
@@ -104,16 +105,11 @@ class CharacterCard extends StatelessWidget {
           ),
           const SizedBox(height: CSpace.xxs),
           Center(
-            child: Container(
-              width: 56,
-              height: 56,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: r.color.withValues(alpha: 0.10),
-                border: Border.all(color: r.color.withValues(alpha: 0.5), width: 1.4),
-              ),
-              child: Text(character.emoji, style: const TextStyle(fontSize: 28)),
+            child: CharacterPortrait(
+              id: character.id,
+              emoji: character.emoji,
+              color: r.color,
+              size: 60,
             ),
           ),
           const SizedBox(height: CSpace.xs),

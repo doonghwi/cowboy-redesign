@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../design/theme.dart';
 import '../design/tokens.dart';
 import '../models/player.dart';
+import 'character_portrait.dart';
 
 /// A single seat around the table: avatar token, name, ammo pips, and status
 /// (alive / shielded / down). Compact so six fit around a circle on a phone.
@@ -53,11 +54,6 @@ class _Avatar extends StatelessWidget {
       height: 58,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [CColors.surfaceHi, CColors.surface],
-        ),
         border: Border.all(
           color: highlight ? CColors.gold : accent.withValues(alpha: player.alive ? 0.7 : 0.3),
           width: highlight ? 2.4 : 1.6,
@@ -67,7 +63,13 @@ class _Avatar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Text(player.emoji, style: const TextStyle(fontSize: 26)),
+          CharacterPortrait(
+            id: player.charId,
+            emoji: player.emoji,
+            color: accent,
+            size: 54,
+            showRing: false,
+          ),
           if (player.shielded)
             const Positioned(
               right: -2,

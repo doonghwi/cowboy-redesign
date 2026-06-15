@@ -2,7 +2,7 @@
 
 > Figma 주도(예정) 리디자인 프로토타입. **cowboy_party 본 앱과 완전 독립**(별도 폴더/repo/도메인).
 > 목표: 카우보이 파티 게임을 처음부터 예쁜 디자인 시스템으로 다시 그린다.
-> 최종 갱신: 2026-06-16 (Cycle 9 — 이펙트 시스템 + 빵야/슈퍼빵야)
+> 최종 갱신: 2026-06-16 (Cycle 11 — 캐릭터 일러스트 통합)
 >
 > **피벗(2026-06-16):** Figma 폐기. 이 레포는 이제 **아트+이펙트 랩**. 핵심 화면(Cycle1~7)은 베이스로 유지.
 > 새 목표: (1) 코드 기반 이펙트 고도화, (2) 캐릭터 일러스트 통합. cowboy_party는 읽기 전용 레퍼런스.
@@ -35,6 +35,12 @@
 - `presenters/hit_burst.dart` — 히트/처치: Flame 방사 파편 + 확장 쇼크링.
 - 셰이더 `shaders/beam.frag`(빔 블룸·헤드 트래블), `shaders/ring.frag`(링 쇼크웨이브) — pubspec `flutter: shaders:` 등록.
 - 검증: `lib/screens/effects_lab_screen.dart`(`/lab`) — 좌석 토큰 링 + Bang/Super/Hit/Clear 버튼. URL에 `auto` 포함 시 주기 발사(스크린샷용, `?auto=1#/lab`). 샷 `shots/effects/`.
+
+## 1.6 캐릭터 일러스트 (아트 통합)
+- 프롬프트: `art/CHARACTER_PROMPTS.md`(16종, 공통 스타일 블록 + 캐릭터별). **이미지 생성 스크립트 없음** — PNG는 사장님이 직접 생성해 `assets/characters/<id>.png`로 투입.
+- `lib/widgets/character_portrait.dart` `CharacterPortrait` — `Image.asset('assets/characters/<id>.png')` 로드, **`errorBuilder`/`frameBuilder`로 PNG 없으면 이모지 코드 플레이스홀더**(레어리티/역할색 틴트 메달리온)로 폴백. 크래시 없음.
+- 모델: `Character.id`(16종, catalog), `Player.charId`. id는 프롬프트/파일명과 1:1.
+- 통합: **상점 카드**(`saloon_screen.dart` CharacterCard) + **게임 좌석**(`player_seat.dart` _Avatar) 모두 CharacterPortrait 사용. PNG 투입 시 자동 반영.
 
 ## 2. 화면
 - `lib/screens/home_screen.dart` — 홈/타이틀. DuskBackground 위 워드마크(Cowboy/Party) + 태그라인 + PLAY CTA(→ /table) + 보조(How to play/Saloon) + 코인/스트릭/승수 스탯 스트립.
