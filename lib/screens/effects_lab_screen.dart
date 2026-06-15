@@ -60,6 +60,13 @@ class _EffectsLabScreenState extends State<EffectsLabScreen> {
       case 'trap':
         _fx.dispatch(TrapEvent(1 + (_target % (_seatCount - 1))));
         _target++;
+      case 'smoke':
+        _fx.dispatch(SmokeEvent(1 + (_target % (_seatCount - 1))));
+        _target++;
+      case 'curse':
+        _target = 1 + (_target % (_seatCount - 1));
+        _fx.dispatch(CurseEvent(caster: 0, target: _target));
+        _target++;
       case 'super':
         _bang(isSuper: true);
       default:
@@ -113,6 +120,8 @@ class _EffectsLabScreenState extends State<EffectsLabScreen> {
                 onSuper: () => _bang(isSuper: true),
                 onDefend: () => _fx.dispatch(DefendEvent(_target)),
                 onTrap: () => _fx.dispatch(TrapEvent(_target)),
+                onSmoke: () => _fx.dispatch(SmokeEvent(_target)),
+                onCurse: () => _fx.dispatch(CurseEvent(caster: 0, target: _target)),
                 onHit: () => _fx.dispatch(HitEvent(_target)),
                 onClear: _fx.clear,
               ),
@@ -192,6 +201,8 @@ class _Controls extends StatelessWidget {
     required this.onSuper,
     required this.onDefend,
     required this.onTrap,
+    required this.onSmoke,
+    required this.onCurse,
     required this.onHit,
     required this.onClear,
   });
@@ -200,6 +211,8 @@ class _Controls extends StatelessWidget {
   final VoidCallback onSuper;
   final VoidCallback onDefend;
   final VoidCallback onTrap;
+  final VoidCallback onSmoke;
+  final VoidCallback onCurse;
   final VoidCallback onHit;
   final VoidCallback onClear;
   @override
@@ -215,6 +228,8 @@ class _Controls extends StatelessWidget {
           CowboyButton(label: 'Super', icon: Icons.bolt, kind: CButtonKind.secondary, onPressed: ready ? onSuper : null),
           CowboyButton(label: 'Defend', icon: Icons.shield_outlined, kind: CButtonKind.secondary, onPressed: ready ? onDefend : null),
           CowboyButton(label: 'Trap', icon: Icons.crisis_alert, kind: CButtonKind.ghost, onPressed: ready ? onTrap : null),
+          CowboyButton(label: 'Smoke', icon: Icons.cloud, kind: CButtonKind.ghost, onPressed: onSmoke),
+          CowboyButton(label: 'Curse', icon: Icons.bloodtype, kind: CButtonKind.ghost, onPressed: onCurse),
           CowboyButton(label: 'Hit', icon: Icons.whatshot, kind: CButtonKind.ghost, onPressed: onHit),
           CowboyButton(label: 'Clear', icon: Icons.clear_all, kind: CButtonKind.ghost, onPressed: onClear),
         ],

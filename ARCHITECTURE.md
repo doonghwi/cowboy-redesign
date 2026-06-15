@@ -2,7 +2,7 @@
 
 > Figma 주도(예정) 리디자인 프로토타입. **cowboy_party 본 앱과 완전 독립**(별도 폴더/repo/도메인).
 > 목표: 카우보이 파티 게임을 처음부터 예쁜 디자인 시스템으로 다시 그린다.
-> 최종 갱신: 2026-06-16 (Cycle 11 — 캐릭터 일러스트 통합)
+> 최종 갱신: 2026-06-16 (Cycle 12 — 연막/저주 이펙트 · 전 6종 완성)
 >
 > **피벗(2026-06-16):** Figma 폐기. 이 레포는 이제 **아트+이펙트 랩**. 핵심 화면(Cycle1~7)은 베이스로 유지.
 > 새 목표: (1) 코드 기반 이펙트 고도화, (2) 캐릭터 일러스트 통합. cowboy_party는 읽기 전용 레퍼런스.
@@ -32,7 +32,10 @@
 - `effect_shaders.dart` — `EffectShaders.load()`로 `beam.frag`/`ring.frag` 프리로드(`ui.FragmentProgram`).
 - `effect_overlay.dart` — `EffectOverlay`(IgnorePointer + AnimatedBuilder) active 스펙→프레젠터 매핑.
 - `presenters/bang_tracer.dart` — 빵야/슈퍼빵야: **Canvas 다중 글로우 라인(베이스, 항상 보임) + 셰이더 블룸(origin-anchored picture를 회전 합성해 FlutterFragCoord 스크린좌표 함정 회피) + Flame ComputedParticle 머즐 버스트 + 화살촉 + 임팩트 플래시**. 슈퍼는 골드·두께·파티클↑.
+- `presenters/smoke_puff.dart` — 연막: Flame 입자 구름(상승·확산·블러, 성장 후 페이드).
+- `presenters/curse_aura.dart` — 저주: 흔들리는 보라 테더(caster→target) → 타겟에 맥동 오라 + 라이징 모트.
 - `presenters/hit_burst.dart` — 히트/처치: Flame 방사 파편 + 확장 쇼크링.
+- **전 6종 구현 완료**(빵야·슈퍼빵야·방어·덫·연막·저주 + 히트).
 - 셰이더 `shaders/beam.frag`(빔 블룸·헤드 트래블), `shaders/ring.frag`(링 쇼크웨이브) — pubspec `flutter: shaders:` 등록.
 - 검증: `lib/screens/effects_lab_screen.dart`(`/lab`) — 좌석 토큰 링 + Bang/Super/Hit/Clear 버튼. URL에 `auto` 포함 시 주기 발사(스크린샷용, `?auto=1#/lab`). 샷 `shots/effects/`.
 

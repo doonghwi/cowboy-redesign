@@ -87,8 +87,14 @@ void main() {
 
     c.dispatch(const DefendEvent(1));
     c.dispatch(const TrapEvent(2));
+    c.dispatch(const SmokeEvent(1));
+    c.dispatch(const CurseEvent(caster: 0, target: 2));
     expect(c.active.any((s) => s.kind == EffectKind.shieldRing), isTrue);
     expect(c.active.any((s) => s.kind == EffectKind.trapRing), isTrue);
+    expect(c.active.any((s) => s.kind == EffectKind.smokePuff), isTrue);
+    final curse = c.active.firstWhere((s) => s.kind == EffectKind.curseAura);
+    expect(curse.from, anchors[0]); // caster
+    expect(curse.to, anchors[2]); // target
 
     c.clear();
     expect(c.active, isEmpty);
