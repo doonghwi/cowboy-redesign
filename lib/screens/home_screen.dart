@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../design/components.dart';
 import '../design/theme.dart';
 import '../design/tokens.dart';
+import 'game_table_screen.dart';
 
 /// Home / title screen — the first impression.
 /// Hero wordmark over the dusk sky, a single confident "Play" CTA, secondary
@@ -117,7 +118,9 @@ class _PrimaryCta extends StatelessWidget {
       label: 'PLAY',
       icon: Icons.play_arrow_rounded,
       expand: true,
-      onPressed: () {},
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const GameTableScreen()),
+      ),
     );
   }
 }

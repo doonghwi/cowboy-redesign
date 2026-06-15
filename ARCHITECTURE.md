@@ -2,7 +2,7 @@
 
 > Figma 주도(예정) 리디자인 프로토타입. **cowboy_party 본 앱과 완전 독립**(별도 폴더/repo/도메인).
 > 목표: 카우보이 파티 게임을 처음부터 예쁜 디자인 시스템으로 다시 그린다.
-> 최종 갱신: 2026-06-16 (Cycle 1 — 디자인 시스템 + 홈 화면)
+> 최종 갱신: 2026-06-16 (Cycle 2 — 게임 테이블 화면)
 
 ## 1. 디자인 시스템 — "Desert Dusk"
 서부(spaghetti-western) + 모던. 가죽/모래/석양 오렌지 + 남서부 터콰이즈 액센트.
@@ -21,8 +21,14 @@
   - `SectionLabel` — 작은 올캡스 eyebrow.
 
 ## 2. 화면
-- `lib/screens/home_screen.dart` — 홈/타이틀. DuskBackground 위 워드마크(Cowboy/Party) + 태그라인 + PLAY CTA + 보조(How to play/Saloon) + 코인/스트릭/승수 스탯 스트립.
-  - 레이아웃: LayoutBuilder + SingleChildScrollView + ConstrainedBox(minHeight) + 명시적 간격(세로 Spacer/IntrinsicHeight 미사용 — 스크롤뷰 무한 높이 충돌 회피, LESSONS 참조).
+- `lib/screens/home_screen.dart` — 홈/타이틀. DuskBackground 위 워드마크(Cowboy/Party) + 태그라인 + PLAY CTA(→ /table) + 보조(How to play/Saloon) + 코인/스트릭/승수 스탯 스트립.
+  - 레이아웃: SingleChildScrollView + Center + ConstrainedBox(maxWidth 520) + Padding + 명시적 간격(세로 Spacer/IntrinsicHeight 미사용 — 스크롤뷰 무한 높이 충돌 회피, LESSONS 참조).
+- `lib/screens/game_table_screen.dart` — **게임 테이블(센터피스)**. DuskBackground + Column(상단바·아레나·ActionBar).
+  - `_TableArena`: 좌석을 `Align(Alignment)`로 배치(2~6인별 `_layouts` 맵, "You"=하단 중앙, 나머지=상단 호). trig+Positioned 대신 Align 사용(우측 좌석 누락 버그 회피). 중앙 `_FeltTable`(라디얼 펠트) + `_CenterTimer`(원형 진행바 + 카운트).
+  - 좌석 위젯 `lib/widgets/player_seat.dart` `PlayerSeat`: 아바타 토큰(이모지)·이름·역할 라벨·탄약 핍·상태(방어/사망 닷). highlight=내 차례.
+  - 액션바 `lib/widgets/action_bar.dart` `ActionBar`: parallel 토글(연막) 상단 스트립 + 코어 4행(Reload/Defend/Bang!/Trap). cowboy_party SpecialSlot 분류를 룩만 새로 반영. `GameAction` enum, 선택 상태 토글.
+  - 모델 `lib/models/player.dart` `Player`(뷰모델, demoTable 6인). 로직은 추후 cowboy_party에서 이식.
+- 라우팅: `main.dart` `routes` `/`(home)·`/table`(table). 스크린샷 딥링크용(`#/table`).
 
 ## 3. 진입점 / 인프라
 - `lib/main.dart` — `DailyAppStats.recordOpen(appId:'cowboy_redesign', ...)` fire-and-forget 핑 후 `CowboyRedesignApp`.
@@ -31,7 +37,7 @@
 
 ## 4. 진행 단계 (로드맵)
 1. ✅ Cycle 1: 디자인 시스템 + 홈 화면.
-2. ⬜ 게임 테이블(원형 좌석/액션 바) — 가장 중요한 화면.
+2. ✅ Cycle 2: 게임 테이블(원형 좌석 Align 배치 + 액션 바 + 타이머).
 3. ⬜ 상점(Saloon) — 캐릭터 카드.
 4. ⬜ 랭킹.
 5. ⬜ 결과/쇼다운.

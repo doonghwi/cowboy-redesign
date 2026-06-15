@@ -130,7 +130,15 @@ class _CowboyButtonState extends State<CowboyButton> {
           Icon(widget.icon, size: 20, color: fg),
           const SizedBox(width: CSpace.xs),
         ],
-        Text(widget.label, style: CType.button(color: fg)),
+        Flexible(
+          child: Text(
+            widget.label,
+            style: CType.button(color: fg),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
+        ),
       ],
     );
 

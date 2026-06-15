@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'dailyapp_stats.dart';
 import 'design/theme.dart';
+import 'screens/game_table_screen.dart';
 import 'screens/home_screen.dart';
 
 void main() {
@@ -27,7 +28,11 @@ class CowboyRedesignApp extends StatelessWidget {
       title: 'Cowboy Party',
       debugShowCheckedModeBanner: false,
       theme: buildCowboyTheme(),
-      home: const HomeScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (_) => const HomeScreen(),
+        '/table': (_) => const GameTableScreen(),
+      },
     );
   }
 }
