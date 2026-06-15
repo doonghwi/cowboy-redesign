@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../design/components.dart';
 import '../design/theme.dart';
 import '../design/tokens.dart';
+import '../design/transitions.dart';
 import 'game_table_screen.dart';
 import 'how_to_play_screen.dart';
 import 'ranking_screen.dart';
@@ -121,9 +122,7 @@ class _PrimaryCta extends StatelessWidget {
       label: 'PLAY',
       icon: Icons.play_arrow_rounded,
       expand: true,
-      onPressed: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const GameTableScreen()),
-      ),
+      onPressed: () => Navigator.of(context).push(cowboyRoute(const GameTableScreen())),
     );
   }
 }
@@ -139,9 +138,7 @@ class _SecondaryRow extends StatelessWidget {
             kind: CButtonKind.ghost,
             icon: Icons.menu_book_outlined,
             expand: true,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const HowToPlayScreen()),
-            ),
+            onPressed: () => Navigator.of(context).push(cowboyRoute(const HowToPlayScreen())),
           ),
         ),
         const SizedBox(width: CSpace.sm),
@@ -151,9 +148,7 @@ class _SecondaryRow extends StatelessWidget {
             kind: CButtonKind.secondary,
             icon: Icons.storefront_outlined,
             expand: true,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const SaloonScreen()),
-            ),
+            onPressed: () => Navigator.of(context).push(cowboyRoute(const SaloonScreen())),
           ),
         ),
       ],
@@ -166,9 +161,7 @@ class _CoinStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     return CowboyCard(
       padding: const EdgeInsets.symmetric(horizontal: CSpace.lg, vertical: CSpace.md),
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const RankingScreen()),
-      ),
+      onTap: () => Navigator.of(context).push(cowboyRoute(const RankingScreen())),
       child: Row(
         children: const [
           _Stat(icon: Icons.monetization_on, label: 'Coins', value: '1,250', color: CColors.gold),

@@ -2,7 +2,7 @@
 
 > Figma 주도(예정) 리디자인 프로토타입. **cowboy_party 본 앱과 완전 독립**(별도 폴더/repo/도메인).
 > 목표: 카우보이 파티 게임을 처음부터 예쁜 디자인 시스템으로 다시 그린다.
-> 최종 갱신: 2026-06-16 (Cycle 6 — How to play 가이드 · 전 화면 네비 연결)
+> 최종 갱신: 2026-06-16 (Cycle 7 — 공통 페이지 전환 애니메이션)
 
 ## 1. 디자인 시스템 — "Desert Dusk"
 서부(spaghetti-western) + 모던. 가죽/모래/석양 오렌지 + 남서부 터콰이즈 액센트.
@@ -16,6 +16,7 @@
   - `buildCowboyTheme()` → 다크 M3 ThemeData(scheme, scaffold bg, Inter textTheme).
 - **컴포넌트**: `lib/design/components.dart`
   - `DuskBackground` — 전 화면 공통 석양 그라데이션 + 라디얼 글로우 2개.
+  - 전환: `lib/design/transitions.dart` `cowboyRoute<T>()` — 페이드 + 살짝 위로 슬라이드(MaterialPageRoute 대체, 홈 네비 전부 사용).
   - `CowboyButton` — primary(그라데이션+글로우)/secondary(터콰이즈 아웃라인)/ghost. 누름 애니메이션(scale 0.97).
   - `CowboyCard` — 가죽 패널(그라데이션+헤어라인 보더+그림자). 옵션 좌측 accent 스트라이프(IntrinsicHeight로 풀하이트).
   - `SectionLabel` — 작은 올캡스 eyebrow.
