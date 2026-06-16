@@ -13,6 +13,7 @@ import '../effects/game_event.dart';
 import '../models/player.dart';
 import '../widgets/action_bar.dart';
 import '../widgets/player_seat.dart';
+import '../widgets/seat_shake.dart';
 
 /// The game table — the centerpiece. Cowboys arranged around a western felt
 /// table, a turn timer in the middle, the action bar pinned to the bottom, and
@@ -34,12 +35,14 @@ class _GameTableScreenState extends State<GameTableScreen> {
   int _youIndex = 0;
   Timer? _auto;
   int _autoStep = 0;
+  late List<int> _shakeTrig;
 
   bool get _autoMode => Uri.base.toString().contains('auto');
 
   @override
   void initState() {
     super.initState();
+    _shakeTrig = List<int>.filled(widget.players.length, 0);
     _fx = EffectController(
       resolveAnchor: (i) => (i >= 0 && i < _anchors.length) ? _anchors[i] : Offset.zero,
     );
@@ -70,14 +73,28 @@ class _GameTableScreenState extends State<GameTableScreen> {
     switch (_autoStep % 5) {
       case 1:
         _fx.dispatch(DefendEvent(_youIndex));
-        _fx.dispatch(BangEvent(shooter: _youIndex, target: target));
+        _fireShot(target, false);
       case 4:
         _fx.dispatch(CurseEvent(caster: _youIndex, target: target));
-        _fx.dispatch(BangEvent(shooter: _youIndex, target: target, isSuper: true));
+        _fireShot(target, true);
       default:
-        _fx.dispatch(BangEvent(shooter: _youIndex, target: target, isSuper: _autoStep.isEven));
+        _fireShot(target, _autoStep.isEven);
     }
     _autoStep++;
+  }
+
+  /// Fire a beam at [target], then land a hit (burst + seat recoil) once the
+  /// beam arrives — keeping the shake in sync with the shot.
+  void _fireShot(int target, bool isSuper) {
+    _fx.dispatch(BangEvent(shooter: _youIndex, target: target, isSuper: isSuper));
+    final land = Duration(milliseconds: (isSuper ? 900 : 620) ~/ 1.4);
+    Future.delayed(land, () {
+      if (!mounted) return;
+      _fx.dispatch(HitEvent(target));
+      if (target >= 0 && target < _shakeTrig.length) {
+        setState(() => _shakeTrig[target]++);
+      }
+    });
   }
 
   /// Player tapped a seat — fire the effect matching the selected action.
@@ -93,7 +110,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
     }
     // Tapping a rival fires your shot at them.
     final isSuper = _selected == GameAction.special; // demo: special = super-ish
-    _fx.dispatch(BangEvent(shooter: _youIndex, target: index, isSuper: isSuper));
+    _fireShot(index, isSuper);
   }
 
   @override
@@ -108,6 +125,7 @@ class _GameTableScreenState extends State<GameTableScreen> {
                 child: _TableArena(
                   players: widget.players,
                   controller: _fx,
+                  shakeTriggers: _shakeTrig,
                   onLayout: (anchors, youIndex) {
                     _anchors = anchors;
                     _youIndex = youIndex;
@@ -164,11 +182,13 @@ class _TableArena extends StatelessWidget {
   const _TableArena({
     required this.players,
     required this.controller,
+    required this.shakeTriggers,
     required this.onLayout,
     required this.onSeatTap,
   });
   final List<Player> players;
   final EffectController controller;
+  final List<int> shakeTriggers;
   final void Function(List<Offset> anchors, int youIndex) onLayout;
   final ValueChanged<int> onSeatTap;
 
@@ -239,7 +259,10 @@ class _TableArena extends StatelessWidget {
                   onTap: () => onSeatTap(i),
                   child: SizedBox(
                     width: _seatW,
-                    child: PlayerSeat(player: ordered[i], highlight: ordered[i].isYou),
+                    child: SeatShake(
+                      trigger: i < shakeTriggers.length ? shakeTriggers[i] : 0,
+                      child: PlayerSeat(player: ordered[i], highlight: ordered[i].isYou),
+                    ),
                   ),
                 ),
               ),
