@@ -22,6 +22,12 @@ class CharacterPortrait extends StatelessWidget {
   final double size;
   final bool showRing;
 
+  // The illustrations are chest-up bust portraits, so the face sits in the
+  // upper-middle of the square. Zoom in and bias upward so the FACE fills the
+  // circular avatar instead of the chest. Tuned by screenshot across chars.
+  static const double _zoom = 1.85;
+  static const Alignment _faceAlign = Alignment(0, -0.58);
+
   @override
   Widget build(BuildContext context) {
     final ring = showRing
@@ -40,18 +46,23 @@ class CharacterPortrait extends StatelessWidget {
         ),
         border: ring,
       ),
-      child: Image.asset(
-        'assets/characters/$id.png',
-        fit: BoxFit.cover,
-        width: size,
-        height: size,
-        // PNG not supplied yet → graceful emoji placeholder.
-        errorBuilder: (context, error, stack) => _Placeholder(emoji: emoji, size: size),
-        // Avoid a flash of nothing while decoding.
-        frameBuilder: (context, child, frame, wasSync) {
-          if (wasSync || frame != null) return child;
-          return _Placeholder(emoji: emoji, size: size);
-        },
+      child: OverflowBox(
+        maxWidth: size * _zoom,
+        maxHeight: size * _zoom,
+        alignment: _faceAlign,
+        child: Image.asset(
+          'assets/characters/$id.png',
+          fit: BoxFit.cover,
+          width: size * _zoom,
+          height: size * _zoom,
+          // PNG not supplied yet → graceful emoji placeholder (un-zoomed).
+          errorBuilder: (context, error, stack) => _Placeholder(emoji: emoji, size: size),
+          // Avoid a flash of nothing while decoding.
+          frameBuilder: (context, child, frame, wasSync) {
+            if (wasSync || frame != null) return child;
+            return _Placeholder(emoji: emoji, size: size);
+          },
+        ),
       ),
     );
   }
